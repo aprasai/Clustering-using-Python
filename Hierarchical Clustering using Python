@@ -1,0 +1,36 @@
+%config IPcompleter.greedy = True
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+
+#Importing the dataset
+dataset = pd.read_csv('XXX.csv')
+x = dataset[['X','Y']]
+
+#Using dendograms to determine appropriate number of clusters
+# this is one statistical method for determination, it is not the only method
+import scipy.cluster.hierarchy as sch
+dendrogram = sch.dendrogram(sch.linkage(x, method = 'ward')) #ward minimizes variance within each cluster
+plt.title ('Dendrogram')
+plt.xlabel ('Customers')
+plt.ylabel ('Euclidean Distances')
+plt.show()
+
+#Hierarchical Clustering
+#optimal number of cluster is 'N' because the longest vertical distance without crossing a horizontal line is given by the
+#the last blue line,and if we draw a horizontal line crossing it, N vertical lines will be crossed
+from sklearn.cluster import AgglomerativeClustering
+hc = AgglomerativeClustering(n_clusters= N, affinity = 'euclidean', linkage = 'ward')
+x['cluster'] = hc.fit_predict(x)
+
+#Visualization of clusters in two dimensions
+plt.scatter(x['X'][x['cluster']==0],x['Y'][x['cluster']==0], s=50,c='red', label = 'LABEL1')
+plt.scatter(x['X'][x['cluster']==1],x['Y'][x['cluster']==1], s=50,c='green', label = 'LABEL2')
+plt.scatter(x['X'][x['cluster']==2],x['Y'][x['cluster']==2], s=50,c='blue', label = 'LABEL3')
+plt.scatter(x['X'][x['cluster']==3],x['Y'][x['cluster']==3], s=50,c='grey', label = 'LABEL4')
+plt.scatter(x['X'][x['cluster']==4],x['Y'][x['cluster']==4], s=50,c='magenta', label = 'LABEL5')
+plt.title('Clustering of Customers (Heirarchical )')
+plt.xlabel('X')
+plt.ylabel('Y')
+plt.legend()
+plt.show()
